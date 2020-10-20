@@ -27,7 +27,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>⚛️🔥💬</h1>
+        <h1>🔥F1R3CH4T🔥</h1>
         <SignOut />
       </header>
 
@@ -38,8 +38,23 @@ function App() {
   );
 }
 
-function SignIn() {}
-function SignOut() {}
+function SignIn() {
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
+  }
+
+  return (
+      <button onClick={signInWithGoogle}>Sign in with Google</button>
+  )
+}
+
+function SignOut() {
+  return auth.currentUser && (
+    <button onClick={() => auth.signOut()}>Sign Out</button>
+  )
+}
+
 function ChatRoom() {}
 function ChatMessage() {}
 
