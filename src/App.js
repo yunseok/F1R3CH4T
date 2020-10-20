@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+
+import styled from "styled-components"
 import './App.css';
 
 import firebase from 'firebase/app';
@@ -24,12 +26,34 @@ const firestore = firebase.firestore();
 function App() {
   const [user] = useAuthState(auth);
 
+  const Header = styled.header`
+    display: flex;
+    justify-content: space-between;
+  `
+
+  const Title = styled.span`
+    font-size: 32px;
+  `
+
+  const InfoPanel = styled.div`
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    span {
+      margin-right: 12px;
+    }
+  `
+
   return (
     <div className="App">
-      <header>
-        <h2>F1R3CH4T</h2>
-        <SignOut />
-      </header>
+      <Header>
+        <Title>F1R3CH4T</Title>
+        <InfoPanel>
+          <LoggedInAs />
+          <SignOut />
+        </InfoPanel>
+      </Header>
 
       <section>
         {user ? <ChatRoom /> : <SignIn />}
@@ -44,14 +68,33 @@ function SignIn() {
     auth.signInWithPopup(provider);
   }
 
+  const LogInButton = styled.span`
+    cursor: pointer;
+  `
+
   return (
-      <button onClick={signInWithGoogle}>Sign in with Google</button>
+    <LogInButton onClick={signInWithGoogle}>[LOG IN]</LogInButton>
   )
 }
 
 function SignOut() {
+  const LogOutButton = styled.span`
+    cursor: pointer;
+  `
+
   return auth.currentUser && (
-    <span onClick={() => auth.signOut()}>[DISCONNECT]</span>
+    <LogOutButton onClick={() => auth.signOut()}>[DISCONNECT]</LogOutButton>
+  )
+}
+
+function LoggedInAs() {
+  const DisplayUsername = styled.span`
+  `
+
+  return auth.currentUser && (
+    <DisplayUsername>
+      [LOGGED IN AS { auth.currentUser.displayName.replace(/ .*/,'') }]
+    </DisplayUsername>
   )
 }
 
@@ -84,14 +127,19 @@ function ChatRoom() {
     dummy.current.scrollIntoView({ behavior: 'smooth' });
   }, [messages])
 
+  const StartSpan = styled.span`
+    margin-right: 4px;
+  `
+
   return (<>
     <main>
       {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
       <span ref={dummy}></span>
     </main>
     <form onSubmit={sendMessage}>
-      <input 
+      <input
         value={formValue} 
+        placeholder="ENTER YOUR MESSAGE..."
         onChange={(e) => setFormValue(e.target.value)} 
       />
       <button type="submit" disabled={!formValue}>SEND</button>
@@ -100,13 +148,17 @@ function ChatRoom() {
 }
 
 function ChatMessage(props) {
-  const { text, uid, userName } = props.message;
+  const { text, uid, userName, createdAt } = props.message;
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
+  const Message = styled.p`
+    margin: 0;
+  `
+
   return (<>
     <div className={`message ${messageClass}`}>
-      <p>{userName.replace(/ .*/,'')} : {text}</p>
+      <Message>{userName.replace(/ .*/,'')}: {text}</Message>
     </div>
   </>)
 }

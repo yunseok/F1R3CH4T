@@ -2,8 +2,43 @@ html, body {
   background: black;
   color: white;
   font-family: 'VT323', monospace;
+  text-transform: uppercase;
 }
 
 .App {
   padding: 12px;
+}
+
+.info {
+  display: flex;
+}
+
+main {
+  margin: 12px 0px;
+  padding: 8px 0px;
+  border-top: 1px dotted white;
+  border-bottom: 1px dotted white;
+  text-transform: none;
+}
+
+input {
+  border: 0;
+  background: transparent;
+  color: white;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  width: 100%;
+}
+
+input:focus{
+  outline: none;
+}
+
+button {
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  font-family: 'VT323', monospace;
+  width: 100%;
+  margin-top: 8px;
 }
