@@ -6,6 +6,8 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
+// This is useless as I cannot deploy it because I need to enter my credit card info...
+// FUCK GOOGLE
 exports.detectEvilUsers = functions.firestore
     .document('messages/{msgId}')
     .onCreate(async (doc, ctx) => {

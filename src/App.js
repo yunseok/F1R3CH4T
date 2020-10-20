@@ -27,7 +27,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>🔥F1R3CH4T🔥</h1>
+        <h2>F1R3CH4T</h2>
         <SignOut />
       </header>
 
@@ -51,7 +51,7 @@ function SignIn() {
 
 function SignOut() {
   return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>Sign Out</button>
+    <span onClick={() => auth.signOut()}>[DISCONNECT]</span>
   )
 }
 
@@ -65,13 +65,14 @@ function ChatRoom() {
   const sendMessage = async (e) => {
     e.preventDefault();
 
-    const { uid, photoURL } = auth.currentUser;
+    const { uid } = auth.currentUser;
+    const userName = auth.currentUser.displayName;
 
     await messagesRef.add({
+      userName: userName,
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
-      photoURL
     })
 
     setFormValue('');
@@ -89,21 +90,23 @@ function ChatRoom() {
       <span ref={dummy}></span>
     </main>
     <form onSubmit={sendMessage}>
-      <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Say something..." />
-      <button type="submit" disabled={!formValue}>🕊️</button>
+      <input 
+        value={formValue} 
+        onChange={(e) => setFormValue(e.target.value)} 
+      />
+      <button type="submit" disabled={!formValue}>SEND</button>
     </form>
   </>)
 }
 
 function ChatMessage(props) {
-  const { text, uid, photoURL } = props.message;
+  const { text, uid, userName } = props.message;
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
   return (<>
     <div className={`message ${messageClass}`}>
-      <img src={photoURL} />
-      <p>{text}</p>
+      <p>{userName.replace(/ .*/,'')} : {text}</p>
     </div>
   </>)
 }
