@@ -60,7 +60,6 @@ function ChatRoom() {
   const query = messagesRef.orderBy('createdAt').limitToLast(25);
 
   const [messages] = useCollectionData(query, { idField: 'id' });
-
   const [formValue, setFormValue] = useState('');
 
   const sendMessage = async (e) => {
